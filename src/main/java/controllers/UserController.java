@@ -5,13 +5,8 @@
  */
 package controllers;
 
-import config.DBConnection;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -83,32 +78,16 @@ public class UserController extends HttpServlet {
         // Obtener accion solicitada
         String action = request.getParameter("action");
 
-        if (action.equalsIgnoreCase("login")) {
-            String email = request.getParameter("email");
-            String password = request.getParameter("password");
-
-            // Crear objeto usuario
-            User user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
-
-            // Buscar usuario en BD
-            UserDAO userDao = new UserDAO(null);
-            userDao.login(user);
-            // Si hay usuario buscado, mandamos al usuario a la pagina principal del sistema,
-            // en caso contrario mandamos a la vista login
-            if (user.getName() != null) {
-                // Agregamos usuario al JSP, en el alcance de session
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                response.sendRedirect("views/home.jsp");
-
-            } else {
+        switch (action) {
+            case "login":
+                this.login(request, response);
+                break;
+            case "logout":
+                this.login(request, response);
+                break;
+            default:
                 response.sendRedirect("index.jsp");
-            }
-
-        } else {
-            response.sendRedirect("index.jsp");
+                break;
         }
 
     }
@@ -122,5 +101,57 @@ public class UserController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    /**
+     * Metodo de login del sistema
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Limpiamos sesiones del usuario en la aplicacion
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+        }
+
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        // Crear objeto usuario
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+
+        // Buscar usuario en BD
+        UserDAO userDao = new UserDAO(null);
+        userDao.login(user);
+        // Si hay usuario buscado, mandamos al usuario a la pagina principal del sistema,
+        // en caso contrario mandamos a la vista login
+        if (user.getName() != null) {
+            // Agregamos usuario al JSP, en el alcance de session, creamos nueva sesion
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            response.sendRedirect("views/home.jsp");
+        } else {
+            response.sendRedirect("index.jsp");
+        }
+    }
+
+    /**
+     * Cerrar sesion en el sistema
+     *
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    private void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if (request.getSession() != null) {
+            request.getSession().invalidate();
+            response.sendRedirect("index.jsp");
+        } else {
+            response.sendRedirect("index.jsp");
+        }
+    }
 
 }
