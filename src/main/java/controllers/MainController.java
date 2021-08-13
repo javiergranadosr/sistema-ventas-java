@@ -39,6 +39,8 @@ public class MainController extends HttpServlet {
                 request.getRequestDispatcher("views/products.jsp").forward(request, response);
                 break;
             case "employes":
+                request.setAttribute("title", "Sistema ventas | empleados");
+                request.setAttribute("active_employe", "active");
                 request.getRequestDispatcher("views/employes.jsp").forward(request, response);
                 break;
             case "clients":

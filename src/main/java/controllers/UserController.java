@@ -20,7 +20,7 @@ import models.UserDAO;
  *
  * @author javiergranadosr
  */
-@WebServlet(name = "UserController", urlPatterns = {"/user-controller"})
+@WebServlet(name = "UserController", urlPatterns = {"/login", "/logout"})
 public class UserController extends HttpServlet {
 
     /**
@@ -109,7 +109,7 @@ public class UserController extends HttpServlet {
      * @param response
      * @throws IOException
      */
-    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         // Limpiamos sesiones del usuario en la aplicacion
         if (request.getSession() != null) {
             request.getSession().invalidate();
@@ -132,7 +132,8 @@ public class UserController extends HttpServlet {
             // Agregamos usuario al JSP, en el alcance de session, creamos nueva sesion
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
-            response.sendRedirect("views/home.jsp");
+            request.setAttribute("title", "Sistema ventas | inicio");
+            request.getRequestDispatcher("views/home.jsp").forward(request, response);
         } else {
             response.sendRedirect("index.jsp");
         }
