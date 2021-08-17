@@ -16,16 +16,16 @@
                 <a class="nav-link">Inicio</a>
             </li>
             <li class="nav-item <%= request.getAttribute("active_products") != null ? "active" : ""  %> ">
-                <a class="nav-link" href="${pageContext.request.contextPath}/main-controller?view=products" >Productos</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/page?view=products" >Productos</a>
             </li>
             <li class="nav-item <%= request.getAttribute("active_employe") != null ? "active" : ""  %>">
-                <a class="nav-link"  href="${pageContext.request.contextPath}/main-controller?view=employes" >Empleados</a>
+                <a class="nav-link"  href="${pageContext.request.contextPath}/page?view=employes&action=read" >Empleados</a>
             </li>
             <li class="nav-item <%= request.getAttribute("active_clients") != null ? "active" : ""  %> ">
-                <a class="nav-link"  href="${pageContext.request.contextPath}/main-controller?view=clients" target ="my-container">Clientes</a>
+                <a class="nav-link"  href="${pageContext.request.contextPath}/page?view=clients" target ="my-container">Clientes</a>
             </li>
             <li class="nav-item  <%= request.getAttribute("active_sales") != null ? "active" : ""  %>" >
-                <a class="nav-link"  href="${pageContext.request.contextPath}/main-controller?view=sales" target ="my-container">Ventas</a>
+                <a class="nav-link"  href="${pageContext.request.contextPath}/page?view=sales" target ="my-container">Ventas</a>
             </li>
         </ul>
         <div class="btn-group">

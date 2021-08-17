@@ -6,18 +6,21 @@
 package controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import models.User;
+import models.UserDAO;
 
 /**
  *
  * @author javiergranadosr
  */
-@WebServlet(name = "MainController", urlPatterns = {"/main-controller"})
+@WebServlet(name = "MainController", urlPatterns = {"/page"})
 public class MainController extends HttpServlet {
 
     /**
@@ -33,6 +36,7 @@ public class MainController extends HttpServlet {
             throws ServletException, IOException {
 
         String view = request.getParameter("view");
+        String action = request.getParameter("action");
 
         switch (view) {
             case "products":
@@ -41,7 +45,7 @@ public class MainController extends HttpServlet {
             case "employes":
                 request.setAttribute("title", "Sistema ventas | empleados");
                 request.setAttribute("active_employe", "active");
-                request.getRequestDispatcher("views/employes.jsp").forward(request, response);
+                this.action(action,request, response);
                 break;
             case "clients":
                 request.getRequestDispatcher("views/clients.jsp").forward(request, response);
@@ -94,5 +98,34 @@ public class MainController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    /**
+     * Acciones a realizar desde la paginas empleados
+     *
+     * @param action
+     */
+    private void action(String action, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
+        switch (action) {
+            case "read":
+                List<User> employes = new UserDAO(null).fetchAll();
+                System.out.println(employes.toString());
+                // Creamos objetos session, para el listado de los datos
+                HttpSession session = request.getSession();
+                session.setAttribute("employes", employes);
+                 // Acciones a realizar en la vista
+                request.getRequestDispatcher("views/employes.jsp").forward(request, response);
+                break;
+            case "add":
+                break;
+            case "update":
+                break;
+            case "load":
+                break;
+            case "delete":
+                break;
+        }
+
+    }
 
 }
