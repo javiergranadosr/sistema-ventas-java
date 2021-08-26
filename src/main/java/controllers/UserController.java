@@ -74,22 +74,19 @@ public class UserController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         // Obtener accion solicitada
         String action = request.getParameter("action");
-
         switch (action) {
             case "login":
                 this.login(request, response);
                 break;
             case "logout":
-                this.login(request, response);
+                this.logout(request, response);
                 break;
             default:
                 response.sendRedirect("index.jsp");
                 break;
         }
-
     }
 
     /**
@@ -110,6 +107,7 @@ public class UserController extends HttpServlet {
      * @throws IOException
      */
     private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+
         // Limpiamos sesiones del usuario en la aplicacion
         if (request.getSession() != null) {
             request.getSession().invalidate();
@@ -133,9 +131,12 @@ public class UserController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             request.setAttribute("title", "Sistema ventas | inicio");
-            request.getRequestDispatcher("views/home.jsp").forward(request, response);
+            request.setAttribute("active_home", "active");
+            request.getRequestDispatcher("home?view=home").forward(request, response);
         } else {
-            response.sendRedirect("index.jsp");
+            // Repuesta a travez de la peticion del cliente al iniciar sesion en el sistema
+            request.setAttribute("message", "El correo electrónico o contraseña son incorrectos.");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
     }
 

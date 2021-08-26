@@ -3,6 +3,13 @@
 <%-- MENU NAVEGACION DEL SISTEMA --%>
 <jsp:include page = "../WEB-INF/template/navbar.jsp" />
 
+<%-- VERIFICAR SESSION --%>
+<%
+    // Si no existe una session mandamos al usuario a la pagina login
+    if (session.getAttribute("user") == null || session.getAttribute("user").equals("") ) {
+        response.sendRedirect("../index.jsp");
+    }
+%>
 
 <div class ="container" >
     <div class="jumbotron my-5">
