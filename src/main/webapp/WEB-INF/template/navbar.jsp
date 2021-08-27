@@ -18,8 +18,8 @@
             <li class="nav-item <%= request.getAttribute("active_client") != null ? "active" : ""  %> ">
                 <a class="nav-link"  href="${pageContext.request.contextPath}/client?view=clients&action=read">Clientes</a>
             </li>
-            <li class="nav-item  <%= request.getAttribute("active_sales") != null ? "active" : ""  %>" >
-                <a class="nav-link"  href="${pageContext.request.contextPath}/page?view=sales" target ="my-container">Ventas</a>
+            <li class="nav-item  <%= request.getAttribute("active_sale") != null ? "active" : ""  %>" >
+                <a class="nav-link"  href="${pageContext.request.contextPath}/sale?view=sales&action=default">Ventas</a>
             </li>
         </ul>
         <div class="btn-group">
